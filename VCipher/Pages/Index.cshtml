@@ -1,0 +1,57 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Обработчик TXT-файлов";
+}
+
+<div class="text-center">
+    <div class="text-center">
+        <h1>Дешифратор</h1>
+        <form asp-page-handler="AddFile" method="post" asp-page="Index" enctype="multipart/form-data">
+            Файл <input required type="file" name="fileTXT" accept=".txt" />
+            <br />
+            <input type="submit" value="Загрузить TXT файл" />
+        </form>
+        @if (!string.IsNullOrEmpty(Model.FilePath) && string.IsNullOrEmpty(Model.FormattedTextEn))
+        {
+            <p class="text-primary">Файл загружен!</p>
+            <form method="post" asp-page-handler="GetDecryptedText">
+                <input required type="text" name="key" placeholder="Введите ключ" />
+                <button class="button">Расшифровать</button>
+            </form>
+        }
+        @if (!string.IsNullOrEmpty(Model.FormattedTextDe))
+        {
+            <br />
+            @Model.FormattedTextDe
+            <br />
+            <br />
+            <form method="post" asp-page="Index" asp-page-handler="DownloadFormattedText">
+                <div>
+                    <input required type="text" name="fileName" placeholder="Введите имя файла" />
+                    <input required type="submit" value="Скачать дешифрованный файл" class="button" />
+                </div>
+            </form>
+        }
+    </div>
+    <div class="text-center">
+        <h1>Шифратор</h1>
+        <form method="post" asp-page-handler="GetEncryptedText">
+            <textarea required name="text" placeholder="Введите текст"></textarea>
+            <br />
+            <input required type="text" name="key" placeholder="Введите ключ" />
+            <br />
+            <button class="button">Зашифровать</button>
+        </form>
+        @if (!string.IsNullOrEmpty(Model.FormattedTextEn))
+        {
+            <p class="text-primary">Текст зашифрован!</p>
+            <form method="post" asp-page="Index" asp-page-handler="DownloadFormattedText">
+                <div>
+                    <p><input type="text" name="fileName" placeholder="Введите имя файла" /></p>
+                    <input type="submit" value="Скачать зашифрованный файл" class="button" />
+                </div>
+            </form>
+        }
+    </div>
+</div>

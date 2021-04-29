@@ -1,0 +1,34 @@
+﻿@page
+@model DocXFormatModel
+@{
+    ViewData["Title"] = "Обработчик DOCX-файлов";
+}
+<div class="text-center">
+    <div class="text-center">
+        <h1>Шифратор</h1>
+
+        <form asp-page-handler="AddFile" method="post" asp-page="DocxFormat" enctype="multipart/form-data">
+            Файл <input required type="file" name="fileDOCX" accept=".docx" />
+            <br />
+            <input type="submit" value="Загрузить DOCX файл" />
+        </form>
+        @if (!string.IsNullOrEmpty(Model.FilePath))
+        {
+            <p class="text-primary">Файл загружен!</p>
+            <form method="post" asp-page-handler="GetEncryptedText">
+                <input required type="text" name="key" placeholder="Введите ключ" />
+                <button class="button">Зашифровать</button>
+            </form>
+        }
+        @if (!string.IsNullOrEmpty(Model.FormattedTextEn))
+        {
+            <p class="text-primary">Текст зашифрован!</p>
+            <form method="post" asp-page="DocxFormat" asp-page-handler="DownloadFormattedText">
+                <div>
+                    <p><input type="text" name="fileName" placeholder="Введите имя файла" /></p>
+                    <input type="submit" value="Скачать зашифрованный файл" class="button" />
+                </div>
+            </form>
+        }
+    </div>
+</div>
